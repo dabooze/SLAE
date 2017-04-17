@@ -3,7 +3,9 @@
 ;
 ; http://dilsec.wordpress.com
 ; @dab00ze
-
+;
+; create elf32 executable with: ./compile.sh bind_tcp_shellcode
+;
 ; some nifty details
 ; -^- 115 bytes
 ; -^- zero zero's
