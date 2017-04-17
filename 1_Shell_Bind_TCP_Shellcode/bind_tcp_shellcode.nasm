@@ -4,7 +4,11 @@
 ; http://dilsec.wordpress.com
 ; @dab00ze
 ;
+; This assembly code binds /bin/sh to a local port 31337
+; 
 ; create elf32 executable with: ./compile.sh bind_tcp_shellcode
+;
+; You can then test this with: nc -nv 127.0.0.1 31337
 ;
 ; some nifty details
 ; -^- 115 bytes
