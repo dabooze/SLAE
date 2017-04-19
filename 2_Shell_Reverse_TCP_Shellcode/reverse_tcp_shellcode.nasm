@@ -4,6 +4,8 @@
 ; http://dilsec.wordpress.com
 ; @dab00ze
 ;
+; Licensed under CC 3.0 (http://creativecommons.org/licenses/by-sa/3.0/)
+;
 ; This assembly code connects to 127.0.0.1:31337 and sends a local /bin/sh to it
 ; 
 ; create elf32 executable with: ./compile.sh reverse_tcp_shellcode
